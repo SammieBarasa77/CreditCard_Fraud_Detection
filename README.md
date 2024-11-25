@@ -281,56 +281,86 @@ ConfusionMatrixDisplay.from_estimator(best_model, X_test, y_test)
 
 Findings
 
-Logistic Regression:
+**Logistic Regression**
 
-Performance:
+*Performance*
+
 Achieved an F1-score of 0.95 for both Class 0 (non-fraud) and Class 1 (fraud), demonstrating balanced performance.
-Precision (0.97) and Recall (0.92) for the fraud class indicate it is good at identifying fraud cases while minimizing false positives.
-Strengths:
-Simpler and faster to train, making it a suitable option for environments where interpretability and computational efficiency are crucial.
-Limitations:
-May not capture complex patterns in highly non-linear data, resulting in slightly reduced recall for the fraud class.
-Random Forest:
 
-Performance:
+Precision (0.97) and Recall (0.92) for the fraud class indicate it is good at identifying fraud cases while minimizing false positives.
+
+Strengths
+
+Simpler and faster to train, making it a suitable option for environments where interpretability and computational efficiency are crucial.
+
+Limitations
+
+May not capture complex patterns in highly non-linear data, resulting in slightly reduced recall for the fraud class.
+
+Random Forest
+
+*Performance*
+
 Achieved perfect scores (1.00) across all metrics, indicating an excellent ability to identify both fraud (Class 1) and non-fraud (Class 0) cases.
+
 Significantly outperformed Logistic Regression on all metrics.
-Strengths:
+
+Strengths
+
 Handles non-linear relationships and imbalanced data well, as demonstrated by the results.
 High predictive accuracy due to its ensemble nature.
-Limitations:
+
+Limitations
+
 Potential risk of overfitting, particularly if the dataset lacks diversity or sufficient variability.
+
 Computationally expensive compared to Logistic Regression.
-Recommendations
-Use Random Forest for Deployment:
+
+**Recommendations**
+
+Random Forest for Deployment:
 
 Random Forest is the preferred model for fraud detection due to its superior performance across all metrics.
+
 It ensures high accuracy and minimizes the chances of both false negatives (undetected fraud) and false positives (incorrectly flagged legitimate transactions).
+
 Conduct regular monitoring in production to check for overfitting or changes in data patterns (concept drift).
-Further Assessment of Overfitting:
+
+Further Assessment of Overfitting
 
 Validate the Random Forest model on an unseen validation/test set or through techniques like cross-validation to confirm that the perfect scores are not due to overfitting.
+
 If overfitting is observed, consider limiting the depth of trees (max_depth) or reducing the number of estimators (n_estimators) while maintaining performance.
+
 Deploy Logistic Regression as a Baseline:
 
 While not as precise as Random Forest, Logistic Regression offers a more generalizable alternative that is less prone to overfitting.
+
 It could be deployed alongside Random Forest as a secondary model to cross-check predictions in resource-constrained or real-time settings.
+
 Consider Cost-Effective Thresholding:
 
 Fraud detection often involves a tradeoff between precision and recall. Adjust classification thresholds to prioritize fraud detection (high recall) or minimize false alarms (high precision) based on business requirements.
+
 Ensemble or Hybrid Approach:
 
 Combining the strengths of Logistic Regression (interpretability) and Random Forest (accuracy) in an ensemble approach could be explored to balance precision, recall, and computational efficiency.
+
 Conclusions
-Logistic Regression:
+
+*Logistic Regression*
 
 Performed well with a balanced F1-score (0.95) and generalizable results, making it a reliable and interpretable baseline model.
+
 While slightly less accurate in detecting fraud, it is suitable for environments where speed and simplicity are essential.
-Random Forest:
+
+*Random Forest*
 
 Delivered exceptional performance, achieving perfect metrics across the board, making it the most suitable model for fraud detection.
+
 However, perfect metrics warrant caution, as overfitting could result in suboptimal performance on unseen or real-world data.
-Final Recommendation:
 
 Deploy Random Forest as the primary model for fraud detection, with Logistic Regression as a backup or baseline model.
+
 Ensure proper monitoring and retraining as the dataset evolves to maintain high accuracy and prevent model degradation.
+
