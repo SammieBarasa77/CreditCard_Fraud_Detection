@@ -53,11 +53,16 @@ Load the `creditcard.csv` dataset into a Pandas DataFrame.
 df = pd.read_csv(r"C:\Users\samue\Downloads\creditcard.csv")
 df
 ```
+
+![Dtaset](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/dataset.png)
+
 ## Checking Data Types and Missing Values  
 Use `df.info()` to inspect data types and check for missing values.
 ```python
 df.info()
 ```
+![Info](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/info.png)
+
 ## Exploratory Data Analysis (EDA)  
 - **Class Distribution**: Visualize the distribution of fraud (`Class`) to identify class imbalance.
 ```python
@@ -67,6 +72,7 @@ sns.countplot(x='Class', data=df)
 plt.title("Class Distribution")
 plt.show()
 ```
+![Class Distribution](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/fraud_class_distn.png)
 - **Feature Analysis**:  
   - Distribution of `Time`.  
   - Distribution of `Amount`.
@@ -82,6 +88,8 @@ sns.histplot(df['Amount'], bins=50, kde=True)
 plt.title("Distribution of Amount")
 plt.show()
 ```
+![Time-Amount Distribution](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/time_ammount_distn.png)
+
 Correlation Analysis
 ```python
 # Correlation Heatmap
@@ -90,6 +98,8 @@ sns.heatmap(df.corr(), cmap="coolwarm", annot=False)
 plt.title("Correlation Matrix of Features")
 plt.show()
 ```
+![Heatmap](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/heatmap.png)
+
 Distribution of Principal Components
 ```python
 fig, axes = plt.subplots(7, 4, figsize=(20, 15))
@@ -100,6 +110,8 @@ for i, ax in enumerate(axes.flat):
 plt.tight_layout()
 plt.show()
 ```
+![Principal Conponents](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/distn_principal_components.png)
+
 ## Data Cleaning and Preprocessing  
 Standardize features like `Amount` using a `StandardScaler`.
 ```python
@@ -155,7 +167,15 @@ selector = VarianceThreshold(threshold=0.1)
 X_train = selector.fit_transform(X_train)
 X_test = selector.transform(X_test)
 ```
-## Model Development Adn Selection 
+Area under the Precision-Recall Curve
+```python
+# Calculating AUPRC
+auprc = auc(recall, precision)
+print("Area Under Precision-Recall Curve (AUPRC):", auprc)
+```
+![AURPC](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/auprc.png)
+
+## Model Development And Selection 
 - Train a Random Forest Classifier on the balanced and preprocessed dataset.  
 - Tune hyperparameters using GridSearchCV for optimal performance.
 ```python
@@ -172,6 +192,9 @@ for name, model in models.items():
     print(f"Model: {name}")
     print(classification_report(y_test, y_pred))
 ```
+
+![Model Selection](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/model_selecttion_training.png)
+
 ## Model Evaluation  
 Evaluate the model using metrics such as:  
 Confusion Matrix.
@@ -184,6 +207,8 @@ plt.ylabel('Actual')
 plt.title('Confusion Matrix')
 plt.show()
 ```
+![Confusion Matrix](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/confusion_matrix.png)
+
 Random Forest
 ```python
 # Evaluating Random Forest 
@@ -203,6 +228,8 @@ plt.ylabel('Precision')
 plt.title("Precision-Recall Curve")
 plt.show()
 ```
+
+![Precision Recall Curve](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/precsion_recal_curve.png)
 
 Hyperparameter tuning
 ```pyhon
@@ -236,6 +263,74 @@ Calculating AUPRC
 auprc = auc(recall, precision)
 print("Area Under Precision-Recall Curve (AUPRC):", auprc)
 ```
+Evaluating thge best Model
+```python
+y_pred = best_model.predict(X_test)
+print(classification_report(y_test, y_pred))
 
-## Results and Conclusions  
+importances = best_model.feature_importances_
+feature_names = X_train.columns  # Adjust this based on your dataset
+sorted_importances = sorted(zip(feature_names, importances), key=lambda x: x[1], reverse=True)
+print("Feature importances:", sorted_importances)
 
+from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_estimator(best_model, X_test, y_test)
+
+```
+## Findings Recommendations and Conclusions 
+
+Findings
+
+Logistic Regression:
+
+Performance:
+Achieved an F1-score of 0.95 for both Class 0 (non-fraud) and Class 1 (fraud), demonstrating balanced performance.
+Precision (0.97) and Recall (0.92) for the fraud class indicate it is good at identifying fraud cases while minimizing false positives.
+Strengths:
+Simpler and faster to train, making it a suitable option for environments where interpretability and computational efficiency are crucial.
+Limitations:
+May not capture complex patterns in highly non-linear data, resulting in slightly reduced recall for the fraud class.
+Random Forest:
+
+Performance:
+Achieved perfect scores (1.00) across all metrics, indicating an excellent ability to identify both fraud (Class 1) and non-fraud (Class 0) cases.
+Significantly outperformed Logistic Regression on all metrics.
+Strengths:
+Handles non-linear relationships and imbalanced data well, as demonstrated by the results.
+High predictive accuracy due to its ensemble nature.
+Limitations:
+Potential risk of overfitting, particularly if the dataset lacks diversity or sufficient variability.
+Computationally expensive compared to Logistic Regression.
+Recommendations
+Use Random Forest for Deployment:
+
+Random Forest is the preferred model for fraud detection due to its superior performance across all metrics.
+It ensures high accuracy and minimizes the chances of both false negatives (undetected fraud) and false positives (incorrectly flagged legitimate transactions).
+Conduct regular monitoring in production to check for overfitting or changes in data patterns (concept drift).
+Further Assessment of Overfitting:
+
+Validate the Random Forest model on an unseen validation/test set or through techniques like cross-validation to confirm that the perfect scores are not due to overfitting.
+If overfitting is observed, consider limiting the depth of trees (max_depth) or reducing the number of estimators (n_estimators) while maintaining performance.
+Deploy Logistic Regression as a Baseline:
+
+While not as precise as Random Forest, Logistic Regression offers a more generalizable alternative that is less prone to overfitting.
+It could be deployed alongside Random Forest as a secondary model to cross-check predictions in resource-constrained or real-time settings.
+Consider Cost-Effective Thresholding:
+
+Fraud detection often involves a tradeoff between precision and recall. Adjust classification thresholds to prioritize fraud detection (high recall) or minimize false alarms (high precision) based on business requirements.
+Ensemble or Hybrid Approach:
+
+Combining the strengths of Logistic Regression (interpretability) and Random Forest (accuracy) in an ensemble approach could be explored to balance precision, recall, and computational efficiency.
+Conclusions
+Logistic Regression:
+
+Performed well with a balanced F1-score (0.95) and generalizable results, making it a reliable and interpretable baseline model.
+While slightly less accurate in detecting fraud, it is suitable for environments where speed and simplicity are essential.
+Random Forest:
+
+Delivered exceptional performance, achieving perfect metrics across the board, making it the most suitable model for fraud detection.
+However, perfect metrics warrant caution, as overfitting could result in suboptimal performance on unseen or real-world data.
+Final Recommendation:
+
+Deploy Random Forest as the primary model for fraud detection, with Logistic Regression as a backup or baseline model.
+Ensure proper monitoring and retraining as the dataset evolves to maintain high accuracy and prevent model degradation.
