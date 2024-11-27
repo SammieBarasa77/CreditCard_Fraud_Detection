@@ -1,5 +1,5 @@
 # Machine Learning Project: Credit Card Fraud Detection
-![Logo](https://github.com/SammieBarasa77/employee_performance/blob/main/assets/images/Screenshot%202024-11-23%20222057.png)
+![Logo](https://github.com/SammieBarasa77/walmart_sales/blob/main/assets/images/cover_final.png)
 
 ## Table of Contents 
 - [Introduction](#Introduction)  
