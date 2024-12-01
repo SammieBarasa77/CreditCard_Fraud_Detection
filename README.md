@@ -232,7 +232,7 @@ plt.show()
 ![Precision Recall Curve](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/precsion_recal_curve.png)
 
 Hyperparameter tuning
-```pyhon
+```python
 # Hyperparameter tuning with GridSearchCV
 param_grid = {
     'n_estimators': [50, 100, 200],
