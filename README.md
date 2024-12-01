@@ -247,6 +247,7 @@ best_model = grid_search.best_estimator_
 # Print best parameters
 print("Best parameters found:", grid_search.best_params_)
 ```
+
 Interpreting  Insights for business stakeholders
 ```python
 import shap
@@ -263,6 +264,8 @@ Calculating AUPRC
 auprc = auc(recall, precision)
 print("Area Under Precision-Recall Curve (AUPRC):", auprc)
 ```
+![Area Under Recall Curve](https://github.com/SammieBarasa77/CreditCard_Fraud_Detection/blob/main/assets/images/AUPRC.png)
+
 Evaluating thge best Model
 ```python
 y_pred = best_model.predict(X_test)
